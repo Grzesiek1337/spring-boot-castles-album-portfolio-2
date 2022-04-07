@@ -18,6 +18,14 @@ public class CastleMapper {
                 castle.getPhotos());
     }
 
+    public static Castle mapDtoToCastle(CastleDTO castleDTO) {
+        Castle castle = new Castle();
+        castle.setCastleName(castleDTO.castleName());
+        castle.setCastleDescription(castleDTO.castleDescription());
+        castle.setCastleYearOfBuild(castleDTO.castleYearOfBuild());
+        return castle;
+    }
+
     public static List<CastleDTO> mapCastlesListToDtoList(List<Castle> castles) {
         return castles.stream()
                 .map(castle -> new CastleDTO(castle.getId(),
