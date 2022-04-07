@@ -43,33 +43,28 @@ public class CastleController {
     }
 
     @PostMapping("/add")
-    public ModelAndView saveCastle(@RequestParam("imageFile") MultipartFile imageFile, Castle castleDTO) {
+    public String saveCastle(@RequestParam("imageFile") MultipartFile imageFile, Castle castle) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            castleService.save(castleDTO);
+            castleService.save(castle);
         } catch (Exception e) {
             log.error("unable to save castle", e);
             e.printStackTrace();
-            modelAndView.setViewName("error");
-            return modelAndView;
+            return "error";
         }
         Photo photo = new Photo();
         photo.setFileName(imageFile.getOriginalFilename());
         photo.setPath("/static/");
-        photo.setCastle(castleDTO);
-        modelAndView.setViewName("index");
+        photo.setCastle(castle);
         try {
-            castleDTO.setCastleMainPhoto(photo);
+            castle.setCastleMainPhoto(photo);
             castleService.saveImage(imageFile, photo);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Error saving photo", e);
             modelAndView.setViewName("error");
-            return modelAndView;
         }
-        modelAndView.addObject("photoDTO", photo);
-        modelAndView.addObject("specimenDTO", castleDTO);
-        return modelAndView;
+        return "redirect:/";
     }
 
     @GetMapping("/edit/{id}")
