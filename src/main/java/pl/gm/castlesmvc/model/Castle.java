@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 
@@ -19,14 +19,26 @@ public class Castle {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(unique = true)
+    @NotEmpty(message = "Castle name should not be empty.")
+    @Size(min = 3,max=20, message = "Castle name length is not enough.")
     private String castleName;
 
     @OneToOne
     private Photo castleMainPhoto;
 
-    @Size(max = 1000)
+    @NotEmpty(message = "Castle description should not be empty.")
+    @Size(min = 15,max=255,message = "Castle description length is not enough.")
     private String castleDescription;
+
+
+    @Min(message = "Castle year of build must be greater than or equal to -2000", value = -2000)
+    @Max(message = "Castle year of build must be less than or equal to 2029", value = 2029)
     private int castleYearOfBuild;
+
+    @NotEmpty(message = "Castle location should not be empty.")
+    @Size(min = 3,max=20,message = "Castle location length is not enough.")
     private String castleLocation;
 
     @OneToMany(mappedBy="castle")
@@ -38,4 +50,6 @@ public class Castle {
         this.castleYearOfBuild = castleYearOfBuild;
         this.castleLocation = castleLocation;
     }
+
+
 }
