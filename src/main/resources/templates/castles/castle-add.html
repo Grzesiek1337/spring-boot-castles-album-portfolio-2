@@ -8,38 +8,43 @@
 </head>
 <body>
 <header th:insert="fragments/general-fragments.html :: header"></header>
-<img th:src="@{'/photos/add-castle-tb.jpeg'}" class="img-fluid" style="max-width: 100%" >
+<!--<img th:src="@{'/photos/add-castle-tb.jpeg'}" class="img-fluid" style="max-width: 100%">-->
 <div class="d-flex justify-content-center">
-    <form action="#" th:action="@{/castle/add}" th:object="${castleDTO}" method="POST" enctype="multipart/form-data">
+    <form action="#" th:action="@{/castle/add}" th:object="${castle}" method="POST" enctype="multipart/form-data">
         <div>
             <div>
                 <span>Castle Name</span>
             </div>
             <input type="text" th:field="*{castleName}">
+            <div class="text-decoration-none" th:if="${#fields.hasErrors('castleName')}" th:errors="*{castleName}"></div>
         </div>
         <div>
             <div>
                 <span>Castle Description</span>
             </div>
             <input type="text"  th:field="*{castleDescription}">
+            <div class="text-decoration-none" th:if="${#fields.hasErrors('castleDescription')}" th:errors="*{castleDescription}"></div>
         </div>
         <div>
             <div>
                 <span>Year of build</span>
             </div>
             <input type="number" th:field="*{castleYearOfBuild}">
+            <div class="text-decoration-none" th:if="${#fields.hasErrors('castleYearOfBuild')}" th:errors="*{castleYearOfBuild}"></div>
         </div>
         <div>
             <div>
                 <span>Location</span>
             </div>
             <input type="text" th:field="*{castleLocation}">
+            <div class="text-decoration-none" th:if="${#fields.hasErrors('castleLocation')}" th:errors="*{castleLocation}"></div>
         </div>
         <div>
             <div>
                 <span>Castle Main Image</span>
             </div>
             <input type="file" name="imageFile">
+            <div class="text-decoration-none" th:text="${emptyPhotoMessage}"></div>
         </div>
         <input type="submit" value="Upload"/>
     </form>
