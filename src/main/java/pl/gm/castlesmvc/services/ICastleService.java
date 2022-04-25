@@ -10,13 +10,13 @@ import java.util.List;
 @Transactional
 public interface ICastleService {
 
-    public List<Castle> listAll();
+    List<Castle> listAll();
 
-    public void save(Castle castleDTO);
+    void save(Castle castleDTO);
 
-    public Castle get(long id);
+    Castle get(long id);
 
-    public void update(Castle castleDTO);
+    void update(Castle castleDTO);
 
-    public void delete(long id);
+    void delete(long id);
 }
