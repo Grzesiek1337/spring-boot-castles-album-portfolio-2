@@ -3,6 +3,7 @@ package pl.gm.castlesmvc.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name="castles")
+@ToString
 public class Castle {
 
     @Id
@@ -25,7 +27,7 @@ public class Castle {
     @Size(min = 3,max=20, message = "Castle name length is not enough.")
     private String castleName;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Photo castleMainPhoto;
 
     @NotEmpty(message = "Castle description should not be empty.")
