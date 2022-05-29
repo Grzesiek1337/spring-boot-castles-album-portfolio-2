@@ -23,16 +23,16 @@ public class CastleService implements  ICastleService {
         return castleRepository.findAll();
     }
 
-    public void save(Castle castleDTO) {
-        castleRepository.save(castleDTO);
+    public void save(Castle castle) {
+        castleRepository.save(castle);
     }
 
     public Castle get(long id) {
         return castleRepository.findById(id).get();
     }
 
-    public void update(Castle castleDTO) {
-        castleRepository.save(castleDTO);
+    public void update(Castle castle) {
+        castleRepository.save(castle);
     }
 
     public void delete(long id) {
