@@ -6,13 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import pl.gm.castlesmvc.mapper.CastleMapper;
 import pl.gm.castlesmvc.model.Castle;
 import pl.gm.castlesmvc.model.Photo;
 import pl.gm.castlesmvc.services.CastleService;
+import pl.gm.castlesmvc.services.PhotoService;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/castle")
@@ -22,10 +25,16 @@ public class CastleController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private CastleService castleService;
+    private final CastleService castleService;
+
+    @ResponseBody
+    @RequestMapping("/testing")
+    public String responseTest() {
+        return castleService.listAll().toString();
+    }
 
     @GetMapping("/list")
-    public String allCastles(Model model) {
+    public String allCastleAlbums(Model model) {
         model.addAttribute("castles", CastleMapper.mapCastlesListToDtoList(castleService.listAll()));
         return "castles/castle-list";
     }
@@ -38,13 +47,18 @@ public class CastleController {
 
     @GetMapping("/add")
     public String addCastle(Model model) {
-        model.addAttribute("castleDTO", new Castle());
+        model.addAttribute("castle", new Castle());
         return "/castles/castle-add";
     }
 
     @PostMapping("/add")
-    public String saveCastle(@RequestParam("imageFile") MultipartFile imageFile, Castle castle) {
-        ModelAndView modelAndView = new ModelAndView();
+    public String saveCastle(@Valid Castle castle, BindingResult bindingResult, @RequestParam("imageFile") MultipartFile imageFile, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "/castles/castle-add";
+        } else if (imageFile.getOriginalFilename().isEmpty()) {
+            model.addAttribute("emptyPhotoMessage", "Main photo is needed.");
+            return "/castles/castle-add";
+        }
         try {
             castleService.save(castle);
         } catch (Exception e) {
@@ -62,7 +76,6 @@ public class CastleController {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Error saving photo", e);
-            modelAndView.setViewName("error");
         }
         return "redirect:/";
     }
@@ -79,6 +92,7 @@ public class CastleController {
         castleService.update(castle);
         return "redirect:/";
     }
+
     @GetMapping("/remove/{id}")
     public String getRemoveFormForAlbum(@PathVariable int id, Model model) {
         model.addAttribute("castleId", id);
@@ -88,7 +102,8 @@ public class CastleController {
     @GetMapping("/delete/{id}")
     public String removeAlbum(@PathVariable long id, Model model) {
         castleService.delete(id);
+        //TODO image remove from folder
         model.addAttribute("castleId", null);
-        return "index";
+        return "redirect:/";
     }
 }
