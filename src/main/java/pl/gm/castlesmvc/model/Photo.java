@@ -1,6 +1,7 @@
 package pl.gm.castlesmvc.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name="photos")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Photo {
 
     @Id
@@ -20,8 +22,8 @@ public class Photo {
     @ManyToOne
     private Castle castle;
 
-
-
-
-
+    public Photo(String path, String fileName) {
+        this.path = path;
+        this.fileName = fileName;
+    }
 }
