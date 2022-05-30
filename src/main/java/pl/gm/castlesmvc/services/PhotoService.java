@@ -23,8 +23,13 @@ public class PhotoService implements IPhotoService {
         Path absolutePath = currentPath.toAbsolutePath();
         photo.setPath(absolutePath + "/src/main/resources/static/photos/");
         byte[] bytes = imageFile.getBytes();
-        Path path = Paths.get(photo.getPath() + imageFile.getOriginalFilename());
+        Path path = Paths.get(photo.getPath() + photo.getFileName());
         Files.write(path, bytes);
+    }
+
+    public void removePhotoImage(Photo photo) throws Exception {
+        Path path = Paths.get(photo.getPath() + photo.getFileName());
+        Files.delete(path);
     }
 
     @Override
