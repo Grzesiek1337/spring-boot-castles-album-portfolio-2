@@ -13,7 +13,6 @@ import pl.gm.castlesmvc.mapper.CastleMapper;
 import pl.gm.castlesmvc.model.Castle;
 import pl.gm.castlesmvc.model.Photo;
 import pl.gm.castlesmvc.services.CastleService;
-import pl.gm.castlesmvc.services.PhotoService;
 
 import javax.validation.Valid;
 
@@ -67,7 +66,7 @@ public class CastleController {
             return "error";
         }
         Photo photo = new Photo();
-        photo.setFileName(imageFile.getOriginalFilename());
+        photo.setFileName(castle.getCastleName() + imageFile.getOriginalFilename());
         photo.setPath("/static/");
         photo.setCastle(castle);
         try {
@@ -100,9 +99,9 @@ public class CastleController {
     }
 
     @GetMapping("/delete/{id}")
-    public String removeAlbum(@PathVariable long id, Model model) {
+    public String removeAlbum(@PathVariable long id, Model model) throws Exception {
+        castleService.removeMainImage(castleService.get(id));
         castleService.delete(id);
-        //TODO image remove from folder
         model.addAttribute("castleId", null);
         return "redirect:/";
     }
