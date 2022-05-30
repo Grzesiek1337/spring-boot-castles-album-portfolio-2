@@ -43,4 +43,7 @@ public class CastleService implements  ICastleService {
         photoService.savePhotoImage(photo, imageFile);
         photoService.save(photo);
     }
+    public void removeMainImage(Castle castle) throws Exception {
+        photoService.removePhotoImage(castle.getCastleMainPhoto());
+    }
 }
